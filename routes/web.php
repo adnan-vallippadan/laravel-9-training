@@ -35,9 +35,34 @@ Route::get('/contact', [PageController::class, 'contact']);
 
 Route::get('/hello/{name}', [PageController::class, 'hello']);
 
-Route::group(["prefix" => "/form"], function() {
+Route::group(["prefix" => "/form", "middleware" => "auth-token"], function() {
     Route::get("/", [FormController::class, "index"]);
     Route::post("/submit", [FormController::class, "submitData"]);
 });
 
 Route::resource('/users', UserController::class);
+
+Route::get('/login', function () {
+    return view('pages.login');
+});
+
+Route::get('/home', function() {
+    return view('pages.home');
+})->middleware("token-auth");
+
+Route::get('/blade', function() {
+    $number = -10;
+    $x = 25;
+    $namesArray = ["Aju", "Anu", "Ammu", "Ali", "Abi", "Siya", "Dinu", "Gini"];
+    return view('pages.blade', compact("number", "x", "namesArray"));
+});
+
+
+// Template Inheritance
+
+Route::get('/layout', function () {
+    return view('template-inheritance.layout');
+});
+Route::get('/child-1', function () {
+    return view('template-inheritance.child-1');
+});
